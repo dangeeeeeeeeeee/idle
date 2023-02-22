@@ -8,7 +8,7 @@ class Member(models.Model):
     rdate = models.DateTimeField()
     dept = models.CharField(max_length=10)
     fire = models.CharField(max_length=2)
-    classname = models.CharField(unique=True, max_length=10)
+    classname = models.ForeignKey('ClassNames', on_delete=models.CASCADE)
     
 class Post(models.Model):
     Post_id = models.AutoField(primary_key=True)
@@ -29,3 +29,6 @@ class Comment(models.Model):
 class Categories(models.Model):
     Cat_name = models.CharField(primary_key=True, max_length=20)
     Cat_info = models.TextField()
+    
+class ClassNames(models.Model):
+    classnames = models.CharField(primary_key=True, max_length=30)

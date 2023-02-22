@@ -12,4 +12,6 @@ urlpatterns = [
     
     ########################################################
     
+    # path('page_list/', views.page_list, name='page_list'), 
+    path('', views.PageListView.as_view(), name='page_list'),
 ]
