@@ -13,4 +13,6 @@ urlpatterns = [
     ########################################################
     
     path('postList/', views.post_list, name='post_list'), 
+    path('postList/<int:Post_id>', views.post_detail, name='post_detail'),
+    path('postWrite/', views.post_write, name='post_write'), 
 ]

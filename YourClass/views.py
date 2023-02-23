@@ -13,6 +13,7 @@ def index(request):
     context = {
         'member' : member
     }
+    request.session['login_'] = "hong@gmail.com"
     return HttpResponse(template.render(context, request))
    
 #회원가입
@@ -51,3 +52,33 @@ def post_list(request):
         'post_list': page_obj,
     }
     return HttpResponse(template.render(context, request))
+
+def post_detail(request, Post_id):
+    template = loader.get_template('post_detail.html')
+
+    post = Post.objects.get(Post_id=Post_id)
+    context = {
+        'post' : post
+    }
+    return HttpResponse(template.render(context, request))
+    
+# from .models import Post
+# from .models import Member
+from django.shortcuts import redirect
+from .forms import PostWriteForm
+
+def post_write(request):
+    if request.method == "POST":
+        form = PostWriteForm(request.POST)
+        user = request.session['login_']
+        user_id = Member.objects.get(email = user)
+
+        if form.is_valid():
+            post = form.save(commit = False)
+            post.writer = user_id
+            post.save()
+            return redirect('post:post_list')
+    else:
+        form = PostWriteForm()
+
+    return render(request, "post_write.html", {'form': form})
