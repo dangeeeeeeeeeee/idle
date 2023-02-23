@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>YourClass - Team IDLE</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+	<style>
+        @import url('https://fonts.googleapis.com/css2?family=Mynerve&display=swap');
+	</style>
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="{% static 'lib/animate/animate.min.css'%}" rel="stylesheet">
+    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css'%}" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="{% static 'css/style.css'%}" rel="stylesheet">
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+         }
+         th, td {
+            padding: 5px;
+         }
+    </style>
+</head>
+
+<body>
+	
+    <div class="container-xxl bg-white p-0">
+        <!-- 웹페이지 로딩시 화면 시작 -->
+        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- 웹페이지 로딩시 화면 끝 -->
+
+
+        <!-- 네비게이션바와 메인페이지 시작 -->
+        <div class="container-xxl position-relative p-0">
+            <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0"> <!-- style="background-color: #00b98e;" -->
+                <a href="index" class="navbar-brand p-0">
+                    <h1 class="m-0">YourClass</h1>
+                    <!-- <img src="img/logo.png" alt="Logo"> -->
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                    <span class="fa fa-bars"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-nav ms-auto py-0">
+					<!-- 툴바 가장 앞의 내용은 : 비회원접속시 아무것도안뜸, 회원접속시 회원이름이 뜨고 이름을 클릭하면 마이페이지로 이동 -->
+					{% if session %}
+						<!-- 로그인페이지에서 인덱스로 리다이렉트될 때 세션과 Member.class(이따 아래에서 나옴), Member.name 가 넘어와야한다-->
+                        <a href='mypage' class="nav-item nav-link active">name</a>
+					{% endif %}
+                        <a href="calendar" class="nav-item nav-link">일정</a>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">게시판</a>
+                            <div class="dropdown-menu m-0">
+								<!-- 게시판명은 Models.py의 Categories 테이블의 name 컬럼의 값을 반복으로 넣어줘야함-->
+								{% comment %} {% for category in categories %}
+                                <a href="{{}}.html" class="dropdown-item">{{}}</a>
+								{% endfor %} {% endcomment %}
+                            </div>
+                        </div>
+                        <a href="{% url 'post_list' %}" class="nav-item nav-link">자료실</a>
+                    </div>
+                    <a href="login" class="btn btn-light rounded-pill text-primary py-2 px-4 ms-lg-5">로그인</a>
+                </div>
+            </nav>
+
+			<!-- 회의하는 사람들 이미지와 소개내용 -->
+            <div class="container-xxl bg-primary hero-header">
+                
+                <div class="container">
+                    <div class="row g-5 align-items-center">
+                        <div class="col-lg-6 text-center text-lg-start">
+							<!-- 소개페이지 타이틀 : 비회원접속시와 회원접속시 구분 -->
+							{% if session %}
+                                <h1 class="text-white mb-4 animated zoomIn"> 환영합니다 {{classname}} 입니다</h1>
+							{% else %}
+								<!-- 로그인페이지에서 인덱스로 리다이렉트될 때 세션과 Member.class, Member.name가 넘어와야한다-->
+                                <h1 class="text-white mb-4 animated zoomIn">당신이 만날 새로운 커뮤니티 공간</h1>
+							{% endif %}
+                            <p class="text-white pb-3 animated zoomIn">유어클래스에 가입하면 엄청나게 많은 혜택을 누리실 수 있습니다 게다가 이모든것이 공짜 이래도 가입안할거야??</p>
+                            <a href="signup" class="btn btn-outline-light rounded-pill border-2 py-3 px-5 animated slideInRight">회원가입</a>
+                        </div>
+                        <div class="col-lg-6 text-center text-lg-start">
+                            <img class="static 'img-fluid animated zoomIn" src="{% static 'img/hero.png'%}" alt="">
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <!-- 네비게이션바와 메인페이지 끝 -->
+	
+        <!--  -->
+        <div>
+            <center>
+                <h1>
+                    자료실 목록
+                </h1>
+                <a href=''>정렬에 쓸 태그로 교체</a> &nbsp;&nbsp;
+                <a href=''>css 수정</a><br/>
+                <table>
+                    <tr>
+                        <th>번호</th>
+                        <th>제목</th>
+                        <th>등록일</th>
+                        <th>조회수</th>
+                        <th>글쓴이</th>
+                    </tr>
+
+                    {% for post in post_list %}
+                    <tr>
+                        <td>{{post.Post_id}}</td>
+                        <td align='center'><a href="">{{post.title}}</a></td>
+                        <td>{{post.date}}</td>
+                        <td>{{post.viewcount}}</td>
+                        <td align='center'>{{post.email_id}}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <!-- 페이징처리 시작 -->
+                <ul class="pagination justify-content-center">
+                    <!-- 이전페이지 -->
+                    {% if post_list.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ post_list.previous_page_number }}">이전</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+                    </li>
+                    {% endif %}
+                    <!-- 페이지리스트 -->
+                    {% for page_number in post_list.paginator.page_range %}
+                    {% if page_number == post_list.number %}
+                    <li class="page-item active" aria-current="page">
+                        <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                    <!-- 다음페이지 -->
+                    {% if post_list.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ post_list.next_page_number }}">다음</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                <!-- 페이징처리 끝 -->                
+            </center>
+        </div>
+
+        <!-- Footer Start -->
+        <div class="container-fluid bg-dark text-light footer pt-5 wow fadeIn" data-wow-delay="0.1s" style="margin-top: 6rem;">
+            <div class="container py-5">
+                <div class="row g-5">
+                    <div class="col-md-6 col-lg-3">
+                        <h5 class="text-white mb-4">연락주실 곳</h5>
+                        <p><i class="fa fa-map-marker-alt me-3"></i>413</p>
+                        <p><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
+                        <p><i class="fa fa-envelope me-3"></i>info@example.com</p>
+                        <div class="d-flex pt-2">
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-youtube"></i></a>
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-instagram"></i></a>
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <h5 class="text-white mb-4">Quick Link</h5>
+                        <a class="btn btn-link" href="">About Us</a>
+                        <a class="btn btn-link" href="">Contact Us</a>
+                        <a class="btn btn-link" href="">Privacy Policy</a>
+                        <a class="btn btn-link" href="">Terms & Condition</a>
+                        <a class="btn btn-link" href="">Career</a>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <h5 class="text-white mb-4">Popular Link</h5>
+                        <a class="btn btn-link" href="">About Us</a>
+                        <a class="btn btn-link" href="">Contact Us</a>
+                        <a class="btn btn-link" href="">Privacy Policy</a>
+                        <a class="btn btn-link" href="">Terms & Condition</a>
+                        <a class="btn btn-link" href="">Career</a>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <h5 class="text-white mb-4">Newsletter</h5>
+                        <p>Lorem ipsum dolor sit amet elit. Phasellus nec pretium mi. Curabitur facilisis ornare velit non vulpu</p>
+                        <div class="position-relative w-100 mt-3">
+                            <input class="form-control border-0 rounded-pill w-100 ps-4 pe-5" type="text" placeholder="Your Email" style="height: 48px;">
+                            <button type="button" class="btn shadow-none position-absolute top-0 end-0 mt-1 me-2"><i class="fa fa-paper-plane text-primary fs-4"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="copyright">
+                    <div class="row">
+                        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                            &copy; <a class="border-bottom" href="#">Your Site Name</a>, All Right Reserved. 
+							
+							<!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+							Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a>
+                            <br>Distributed By: <a class="border-bottom" href="https://themewagon.com" target="_blank">ThemeWagon</a>
+                        </div>
+                        <div class="col-md-6 text-center text-md-end">
+                            <div class="footer-menu">
+                                <a href="">Home</a>
+                                <a href="">Cookies</a>
+                                <a href="">Help</a>
+                                <a href="">FQAs</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer End -->
+
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'lib/wow/wow.min.js'%}"></script>
+    <script src="{% static 'lib/easing/easing.min.js'%}"></script>
+    <script src="{% static 'lib/waypoints/waypoints.min.js'%}"></script>
+    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js'%}"></script>
+
+    <!-- Template Javascript -->
+    <script src="{% static 'js/main.js'%}"></script>
+</body>
+
+</html>
