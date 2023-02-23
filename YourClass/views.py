@@ -40,42 +40,14 @@ def board1():
     pass
 
 #대원 추가
-""" def page_list(request):
-    template = loader.get_template('page_list.html')
+from django.core.paginator import Paginator
+def post_list(request):
+    template = loader.get_template('post_list.html')
+    page = request.GET.get('page', '1')  # 페이지
     posts = Post.objects.all().order_by('-Post_id').values()
-
+    paginator = Paginator(posts, 2)  # 페이지당 2개씩 보여주기
+    page_obj = paginator.get_page(page)
     context = {
-        'posts': posts,
+        'post_list': page_obj,
     }
-    return HttpResponse(template.render(context, request)) """
-    
-from django.views.generic import ListView
-
-class PageListView(ListView):
-    model = Post
-    paginate_by = 10
-    template_name = 'page_list.html'
-    context_object_name = 'page_list'
-    
-    def get_querset(self):
-        page_list = Post.objects.order_by('-Post_id')
-        return page_list
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        paginator = context['paginator']
-        page_numbers_range = 5
-        max_index = len(paginator.page_range)
-        
-        page = self.request.GET.get('page')
-        current_page = int(page) if page else 1
-        
-        start_index = int((current_page -1) / page_numbers_range) * page_numbers_range
-        end_index = start_index + page_numbers_range
-        if end_index >= max_index:
-            end_index = max_index
-        
-        page_range = paginator.page_range[start_index:end_index]
-        context['page_range'] = page_range
-        
-        return context
+    return HttpResponse(template.render(context, request))
