@@ -1,8 +1,28 @@
 <h1>새 글 작성</h1>
-<form action="" method="POST">
+<form action="" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    <table>
+    {% comment %} <table>
         {{form.as_table}}
-    </table> 
+    </table> {% endcomment %}
+    <div class="card-header">
+        {{ form.title }}
+    </div>
+    <div>
+        {{ form.content }}
+    </div> 
+    <div>
+        {{ form.file }}
+    </div> 
     <input type="submit" value="제출">
 </form>
+
+{% comment %} <form action="" method="POST" enctype="multipart/form-data">
+    <div class="card-footer">
+        <div class="form-group">
+            {{ form.file }}
+            <small id="help" class="form-text text-muted">
+                [파일 업로드]&nbsp;첨부할 파일을 업로드해주세요. 여러 파일은 압축해서 업로드해주세요.
+            </small>
+        </div>
+    </div>
+</form> {% endcomment %}
