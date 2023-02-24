@@ -15,9 +15,9 @@ class Post(models.Model):
     category = models.ForeignKey('Categories', on_delete=models.CASCADE)
     title = models.CharField(max_length=50)
     content = models.TextField()
-    file = models.TextField()
+    file = models.TextField(null=True)
     date = models.DateTimeField()
-    viewcount = models.TextField()
+    viewcount = models.TextField(default=0)
     email = models.ForeignKey('Member', on_delete=models.CASCADE)
     
 class Comment(models.Model):

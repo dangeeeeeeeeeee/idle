@@ -67,7 +67,7 @@ def post_detail(request, Post_id):
 from django.shortcuts import redirect
 from .forms import PostWriteForm
 
-def post_write(request):
+""" def post_write(request):
     if request.method == "POST":
         form = PostWriteForm(request.POST)
         user = request.session['login_']
@@ -82,3 +82,25 @@ def post_write(request):
         form = PostWriteForm()
 
     return render(request, "post_write.html", {'form': form})
+ """
+ 
+from django.utils import timezone
+def post_write(request):
+    if request.method == "POST":
+        form = PostWriteForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = Post(**form.cleaned_data)
+            # TODO models에서 옵션 auto_now=True로 바꾸고 아래 코드 주석처리 후 테스트
+            nowDatetime = timezone.now().strftime('%Y-%m-%d %H:%M:%S')
+            post.date = nowDatetime
+            post.category = Categories.objects.get(Cat_name="자료실")
+            post.email = Member.objects.get(email=request.session['login_'])
+
+            post.save()
+            return redirect('post_list')
+    else:
+        form = PostWriteForm()
+    context = {
+        'form' : form
+    }
+    return render(request, 'post_write.html', context)
